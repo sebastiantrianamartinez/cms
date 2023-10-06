@@ -1,0 +1,31 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root{
+    --app-color: rgb(0, 179, 255);
+   
+    --light-color: #ccc;
+    --dark-color: #000;
+    --ulight-color: #fff;
+}
+
+.app-input{
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--light-color);
+}
+.app-input:active, .app-input:focus{
+    border: 1px solid var(--app-color);
+    outline: none;
+}
+
+.app-check-combo{
+    display: flex;
+}
+.app-check-combo > input{
+    margin-right: 5px;
+}

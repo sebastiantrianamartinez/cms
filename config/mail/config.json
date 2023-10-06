@@ -1,0 +1,19 @@
+{
+    "server": {
+        "host": "mail.televicentrovalle.com",
+        "port": 465,
+        "crypt": "ssl"
+    },
+    "senders": {
+        "admin": {
+            "email": "admin@terrainversioncol.com",
+            "password": "Popolilo25_52+",
+            "name": "Ambar Inmobiliaria"
+        }, 
+        "security": {
+            "email": "security@terrainversioncol.com",
+            "password": "Popolilo25_52+",
+            "name": "Ambar Inmobiliaria - Seguridad"
+        }
+    }
+}
