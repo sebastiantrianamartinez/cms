@@ -8,4 +8,7 @@
     routing::bigRouting($modules);
 
     echo 'INDEX'
+
 ?>
+
+<a href="endpoints/logout.php">Cerrar sesion</a>

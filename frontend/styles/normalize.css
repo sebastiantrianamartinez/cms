@@ -29,3 +29,11 @@
 .app-check-combo > input{
     margin-right: 5px;
 }
+
+.app-vertical-form{
+    display: flex;
+    flex-direction: column;
+}
+.app-vertical-form > *{
+    margin-bottom: 10px;
+}
