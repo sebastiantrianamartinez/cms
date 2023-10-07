@@ -32,12 +32,6 @@
             htmlFormatter::printStylesheetLink('login.css', true);
 
             htmlFormatter::printScriptLink('config.js', true, true);
-            
-            echo '<script> var api_keys = []; ';
-            foreach($api_keys as $key => $value){
-                echo 'api_keys[' .$key .'] = "' .$value .'";';
-            }
-            echo '</script>';
         ?>
     </head>
     <body>
@@ -56,10 +50,10 @@
                         ?>
                     </div>
                     <input type="text" placeholder="Username or mail" class="app-input login-input" name="user_name">
-                    <input type="password" placeholder="Password" class="app-input login-input" name="user_password">
+                    <input type="password" placeholder="Password" class="app-input login-input" name="user_password" id="user_password">
                     <div>
                         <div class="app-check-combo login-check-combo">
-                            <input type="checkbox">
+                            <input type="checkbox" id="show_password" onclick="showPassword();">
                             <p>Show Password</p>
                         </div>
                         <div class="app-check-combo login-check-combo">

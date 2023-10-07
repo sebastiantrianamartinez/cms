@@ -36,6 +36,15 @@
         }
     }
     $user = $headerRequest["user"];
+    
+    echo '<script> var api_keys = []; ';
+            foreach($api_keys as $key => $value){
+                echo 'api_keys[' .$key .'] = "' .$value .'";';
+            }
+    echo '</script>';
+
+
+
 
     function execHeader($_service){
         $reporter = new reporter();
