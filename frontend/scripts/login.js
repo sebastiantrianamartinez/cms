@@ -35,7 +35,6 @@ function loginApiRequest(api_key){
 
 function showPassword(){
     const passwordInput = document.getElementById('user_password');
-    const showCheckbox = document.getElementById('show_password');
-    var atribute = (showCheckbox.checked) ? "text" : "password";
+    var atribute = (passwordInput.getAttribute('type') == "password") ? "text" : "password";
     passwordInput.setAttribute('type', atribute);
 }

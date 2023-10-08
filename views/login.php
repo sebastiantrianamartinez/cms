@@ -50,12 +50,13 @@
                         ?>
                     </div>
                     <input type="text" placeholder="Username or mail" class="app-input login-input" name="user_name">
-                    <input type="password" placeholder="Password" class="app-input login-input" name="user_password" id="user_password">
+                    <div class="app-password-box">
+                            <input type="password" placeholder="Password" class="app-input login-input" name="user_password" id="user_password">
+                            <?php
+                                htmlFormatter::printImage('eye.png', true, ["onclick" => "showPassword();"]);
+                            ?>
+                    </div>
                     <div>
-                        <div class="app-check-combo login-check-combo">
-                            <input type="checkbox" id="show_password" onclick="showPassword();">
-                            <p>Show Password</p>
-                        </div>
                         <div class="app-check-combo login-check-combo">
                             <input type="checkbox" name="extended">
                             <p>Keep logged</p>

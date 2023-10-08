@@ -37,3 +37,26 @@
 .app-vertical-form > *{
     margin-bottom: 10px;
 }
+
+.app-password-box{
+    display: flex;
+    border: 1px solid var(--light-color);
+    border-radius: 5px;
+    max-height: 30px;
+}
+.app-password-box > input{
+    border: none;
+    width: 100% ;
+    margin: 0 !important;
+}
+.app-password-box > input:active, .app-password-box > input:focus{
+    border: none;
+}
+.app-password-box > img{
+    max-height: 30px;
+    width: auto;
+}
+.app-password-box:has(:focus), .app-password-box:has(:active){
+    border: 1px solid var(--app-color);
+    outline: none;
+}
