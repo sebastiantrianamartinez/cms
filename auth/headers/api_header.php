@@ -58,8 +58,21 @@
         }
     }
 
-    $requestData = json_decode(file_get_contents('php://input'), true);
-    $requestData = (isset($requestData)) ? $requestData : $_POST;
+    $requestData = null;
+
+    $requestDataFromInput = json_decode(file_get_contents('php://input'), true);
+    if (isset($requestDataFromInput)) {
+        $requestData = $requestDataFromInput;
+    }
+
+    if (empty($requestData) && isset($_POST)) {
+        $requestData = $_POST;
+    }
+
+    if (empty($requestData) && isset($_GET)) {
+        $requestData = $_GET;
+    }
+
 
     $middleware = new middleware();
     $middlewareRequest = $middleware->sanitizeArrayRecursive($requestData);

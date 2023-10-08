@@ -89,9 +89,19 @@
         }
 
         public function transaction(array $user, array $service, string $api_key){
+            
             $api_keyRequest = $this->jwtController->decodeToken($api_key, "api_key", NULL);
             if($api_keyRequest["status"] !== 200){
-                return responser::systemResponse(301, "Transaction denied, api_key is wrong", 3);
+                $master_api_key = routing::key('master_api');
+                if($master_api_key["status"] == 200){
+                    if($master_api_key["data"] != $api_key){
+                        return responser::systemResponse(401, "Transaction denied, api_key is wrong ", 3);
+                    } 
+                }
+                else{
+                    return responser::systemResponse(401, "Transaction denied, api_key is wrong", 3);
+                }
+                return responser::systemResponse(200, "Transaction approved", NULL);
             }
             $api_key = $api_keyRequest["data"]["key"];
             $this->qb = new queryBuilder();
@@ -106,7 +116,7 @@
 
             $service_key = $serviceRequest["service_key"];
             if(!password_verify($service_key, $api_key)){
-                return responser::systemResponse(301, "Transaction denied, service_key is wrong ", 4);
+                return responser::systemResponse(401, "Transaction denied, service_key is wrong ", 4);
             }
             if(is_int($serviceRequest["service_timeout"])){
                 $this->qb = new queryBuilder();
@@ -124,7 +134,7 @@
                 $logRequest = $this->database->executeQuery($selectQuery, $params)["data"];
                 $logRequest = $logRequest->fetch();
                 if(!empty($logRequest)){
-                    return responser::systemResponse(301, "Transaction denied, recent transaction log", 5);
+                    return responser::systemResponse(401, "Transaction denied, recent transaction log", 5);
                 }
             }
             $userId = ($user["id"] == 0) ? NULL : $user["id"];

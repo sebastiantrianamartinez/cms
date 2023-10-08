@@ -32,6 +32,7 @@
             htmlFormatter::printStylesheetLink('login.css', true);
 
             htmlFormatter::printScriptLink('config.js', true, true);
+            htmlFormatter::printScriptLink('app/forms.js', true, true);
         ?>
     </head>
     <body>
@@ -53,7 +54,7 @@
                     <div class="app-password-box">
                             <input type="password" placeholder="Password" class="app-input login-input" name="user_password" id="user_password">
                             <?php
-                                htmlFormatter::printImage('eye.png', true, ["onclick" => "showPassword();"]);
+                                htmlFormatter::printImage('eye.png', true, ["onclick" => "showPassword(this, 'user_password');", "id" => "show-password-image"]);
                             ?>
                     </div>
                     <div>
@@ -62,6 +63,7 @@
                             <p>Keep logged</p>
                         </div>
                     </div>
+                    <a href="" class="app-link">Forgot password?</a>
                     <input type="submit" value="Login" class="app-input login-input login-submit">
                 </form>
             </div>

@@ -32,9 +32,3 @@ function loginApiRequest(api_key){
         }
     });
 }
-
-function showPassword(){
-    const passwordInput = document.getElementById('user_password');
-    var atribute = (passwordInput.getAttribute('type') == "password") ? "text" : "password";
-    passwordInput.setAttribute('type', atribute);
-}

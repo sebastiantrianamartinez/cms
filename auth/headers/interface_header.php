@@ -43,6 +43,7 @@
             }
     echo '</script>';
 
+    $website = routing::config('project', 'dns')["data"]["website"];
 
 
 

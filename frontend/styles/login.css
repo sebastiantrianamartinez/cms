@@ -56,15 +56,6 @@ main{
     max-width: 100%;
     max-height: 220px;
     margin-bottom: 20px;
-    
-    /*
-        filter: hue-rotate(140deg) contrast(100%) brightness(120%); red
-        green: filter: hue-rotate(290deg);
-        yellow: filter: hue-rotate(-180deg) contrast(100%) brightness(150%);
-
-        --app-color: #FFAC2C;
-        --app-color: #FF7A88;
-    */
 }
 
 .login-input{

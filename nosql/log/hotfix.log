@@ -2409,3 +2409,8 @@ Stack trace:
 #4 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/auth/headers/interface_header.php(31): execHeader(Array)
 #5 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/views/login.php(8): require_once('/Applications/X...')
 #6 {main} query: SELECT * FROM rules WHERE 1 = :param_0 rule_user = :param_1 AND rule_service = :param_2 AND rule_ip = :param_3 AND rule_agent = :param_4 AND ( rule_exp > :param_5 OR rule_exp IS NULL )
+[SYSTEM ERROR AT 08-10-2023 00:20:36] [BY: database] =>PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ':param_0' at line 1 in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(NULL)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(33): database->executeQuery('SELECT * FROM u...', NULL)
+#2 {main} query: SELECT * FROM users WHERE user_id = :param_0
