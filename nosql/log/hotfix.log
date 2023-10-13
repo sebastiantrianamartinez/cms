@@ -2414,3 +2414,78 @@ Stack trace:
 #0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(NULL)
 #1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(33): database->executeQuery('SELECT * FROM u...', NULL)
 #2 {main} query: SELECT * FROM users WHERE user_id = :param_0
+[SYSTEM ERROR AT 08-10-2023 12:34:46] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'user_name' cannot be null in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(62): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 12:34:55] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'user_name' cannot be null in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(62): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 12:35:20] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'user_name' cannot be null in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(62): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 12:38:02] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'trianametria' for key 'user_name' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(62): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:16:49] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'popolilo' for key 'user_name' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(71): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:20:24] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'popolilo' for key 'user_name' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(71): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:20:26] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'popolilo' for key 'user_name' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(71): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:20:34] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'popolilo' for key 'user_name' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(71): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:20:53] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'popolilo' for key 'user_name' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(71): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:21:12] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'popolilo' for key 'user_name' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(71): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:21:44] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'popolilo' for key 'user_name' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(71): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:25:20] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'trianametria@gmail.com' for key 'user_mail' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(71): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:25:34] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'trianametria' for key 'user_name' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(71): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:38:23] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'chitiS' for key 'user_name' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(77): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
+[SYSTEM ERROR AT 08-10-2023 17:38:29] [BY: database] =>PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'ni@ut.es' for key 'user_mail' in /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php:49
+Stack trace:
+#0 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/core/database/database.php(49): PDOStatement->execute(Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/engine/2.0/fullstack/endpoints/join.php(77): database->executeQuery('INSERT INTO use...', Array)
+#2 {main} query: INSERT INTO users (user_name, user_mail, user_password, user_alias) VALUES (:param_0, :param_1, :param_2, :param_3)
