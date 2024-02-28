@@ -48,6 +48,11 @@
                 $userId = $this->cipher->decode($payload["identity"], $idGap) - $this->config["session"]["id_gap"];
                 $userRepository = $this->entityManager->getRepository(Users::class);
                 $user = $userRepository->find($userId);
+                $tokenRepository = $this->entityManager->getRepository(Tokens::class);
+                $dbToken = $tokenRepository->findOneBy(['value' => $token]);
+                if(!$dbToken){
+                    return false;
+                }
                 if($payload["exp"] > (time() - $this->config["renovation"])){
                     $tokenExp = $this->config["session"]["roles"][($user->getGroup() > 5) ? "user" : "admin"]["exp"];
                     $payload["exp"] = time() + $tokenExp;
@@ -248,7 +253,7 @@
             }
             if($this->cipher->decode($payload["sid"], $sidGap) != $service->getId()){
                 $this->waflogger->create($user, $service, 8, 8, null, $action);
-                throw new EnException("service_id is incorrect ", 4009, null, null);
+                throw new EnException("service_id is incorrect ", 49009, null, null);
             }
             $scope = $this->cipher->decode($payload["scope"], $crudGap);
             if(($scope & $action) !== $action) {
@@ -268,14 +273,15 @@
                 $matchs = $waflogger->getMatchs($user, $service, 1, $timeout, false);
                 if($matchs[1] > 0){
                     $this->waflogger->create($user, $service, 7, 1, null, null);
-                    throw new EnException("Recent transaction detected", 4006, null, $matchs);
+                    throw new EnException("Recent transaction detected " .$timeout, 4006, null, $matchs);
                 }
             }
 
             // SERVICE IS ALLOWED FOR CONSUME
             $this->oneuse('token used', $payload["uuid"], 'set', $payload["exp"] - time());
+            $newToken = $this->authorizationTokenize($user, $service);
             $this->waflogger->create($user, $service, 1, null, null, $action);
-            return true;
+            return $newToken;
         }
 
         public function oneuse(string $token = null, string $uuid, string $action = null, int $exp = 3600){

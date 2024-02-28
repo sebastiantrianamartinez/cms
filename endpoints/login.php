@@ -28,38 +28,36 @@
     try{
         if($_SERVER["REQUEST_METHOD"] == 'POST'){
             if(!$guest){
-                $responser->toHttpRequest(400, "Session already exists", null);
+                $responser->toHttpRequest(400, "Session already exists", $new_api_key);
                 die();
             }
         
             $user = $authServer->authenticate($data["username"], $data["password"]);
             if($user->getId() > 0){
                 $authServer->sessionize($user, $data["persist"]);
-                $responser->toHttpRequest(200, "Session established", null);
+                $responser->toHttpRequest(200, "Session established", $new_api_key);
             }
         }
         if($_SERVER["REQUEST_METHOD"] == 'DELETE'){
             if($guest){
-                $responser->toHttpRequest(404, "No sessions for delete", null);
+                $responser->toHttpRequest(404, "No sessions for delete", $new_api_key);
                 die();
             }
             if($authServer->unlink($sessionToken)){
-                $responser->toHttpRequest(200, "Success logout", null);
+                $responser->toHttpRequest(200, "Success logout", $new_api_key);
                 die();
             }
-            $responser->toHttpRequest(400, "Logout error", null);
+            $responser->toHttpRequest(400, "Logout error", $new_api_key);
             die();
         }
     }
     catch(Exception $e){
-        //$responser->toHttpRequest($e->getCode(), $e->getMessage(), null);
         if($e->getMessage() == "Password incorrect" || $e->getMessage() == "User not found"){
             $waf = new Waf($entityManager);
             $message = $waf->authFail($service);  
-            $responser->toHttpRequest(401, $message, null);
+            $responser->toHttpRequest(401, $message, $new_api_key);
         }
         if($e->getCode() >= 401 && $e->getCode() <= 403){
-            //$responser->toHttpRequest(401, $e->getMessage, null);
             Routing::view(null, 'error/unauthorized.php?reason= '.$e->getCode(), true);
         }
     }

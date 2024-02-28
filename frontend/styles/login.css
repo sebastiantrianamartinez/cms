@@ -1,0 +1,58 @@
+/* Estilo básico para el formulario */
+#app-login-form {
+    max-width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+/* Estilo para los campos de entrada */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Para incluir el padding y el borde en el ancho total */
+}
+
+/* Estilo para el checkbox */
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Estilo para el botón de enviar */
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Estilo para la etiqueta del checkbox */
+label {
+    font-size: 14px;
+}
+
+/* Espacio para mensajes de error y aprobación */
+.message {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.error {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.success {
+    background-color: #4CAF50;
+    color: #fff;
+}

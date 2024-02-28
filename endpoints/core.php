@@ -40,8 +40,12 @@
         
         if(isset($sessionToken)){
             $user = $authServer->authenticateTokenize($sessionToken);
+            if(!$user){
+                $guest = true;
+                setcookie("session_token", "", time() - 3600, "/");
+            }
         }
-        else{
+        if($guest || !$user){
             $user = new Users();
             $user->setId();
             $user->setGroup($config["session"]["guest"]["group"]);
@@ -79,7 +83,7 @@
             $responser->toHttpRequest(401, "Invalid API KEY", null);
             die();
         }
-        $authServer->authorize($user, $service, $api_key, $action) ;
+        $new_api_key = $authServer->authorize($user, $service, $api_key, $action);
     }
     catch(EnException $e){
         $responser = new Responser();
@@ -97,7 +101,7 @@
                 $responser->toHttpRequest(405, "Method not allowed, permission denied", null);
                 break;
             case 4011:
-                $responser->toHttpRequest(429, "You used this service recently, try it later", null);
+                $responser->toHttpRequest(429, "You used this service recently, then try it later " .$e->getMessage(), null);
                 break;
             default:
                 $responser->toHttpRequest(400, "Unknown error", null);

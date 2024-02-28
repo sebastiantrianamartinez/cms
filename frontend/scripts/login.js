@@ -19,13 +19,27 @@ document.addEventListener("DOMContentLoaded", function() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getCookie('pak') 
+                'Authorization': 'Bearer ' + api_keys[1] 
             },
             body: JSON.stringify(formData)
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            api_keys[1] = data.data;
+            if(data.status == 200){
+                let referral = getCookie('referral')
+                if(referral.includes("http")){
+                    window.location.href = referral;
+                }
+                else{
+                    window.location.href = website;
+                }
+            }
+            if(data.status >= 400) {
+                document.getElementById("error-message").innerText = data.message;
+                document.getElementById("error-message").style.display = "block";
+            }
+            // Puedes agregar más lógica aquí según la respuesta recibida
         })
     });
 });

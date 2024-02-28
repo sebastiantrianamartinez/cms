@@ -1,4 +1,4 @@
-const website = "http://192.168.20.8/engine";
+const website = "http://192.168.20.8/cms";
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;

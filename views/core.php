@@ -31,8 +31,12 @@
         
         if(isset($sessionToken)){
             $user = $authServer->authenticateTokenize($sessionToken);
+            if(!$user){
+                $guest = true;
+                setcookie("session_token", "", time() - 3600, "/");
+            }
         }
-        else{
+        if($guest || !$user){
             $user = new Users();
             $user->setId();
             $user->setGroup($config["session"]["guest"]["group"]);
@@ -40,7 +44,7 @@
         }
     
         $api_key = $authServer->authorizationTokenize($user, $service); 
-        setcookie("pak", $api_key, null, null, null);
+        $api_keys[$sid] = $api_key; 
     }
     catch(EnException $e){
         $responser = new Responser();
