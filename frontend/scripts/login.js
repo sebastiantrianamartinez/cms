@@ -1,34 +1,31 @@
-function handleFormSubmit(event, service) {
-    event.preventDefault();
-    loginApiRequest(api_keys[service]);
-}
+document.addEventListener("DOMContentLoaded", function() {
+    // Escuchar el evento submit del formulario
+    document.getElementById("app-login-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        var username = document.getElementById("login-username").value;
+        var password = document.getElementById("login-password").value;
+        var persist = document.getElementById("login-persist").checked;
 
-function loginApiRequest(api_key){
-    const form = document.getElementById("login-form");
-    const formData = new FormData(form);
-    const panel = document.getElementById("form-info-panel");
-    const info = document.getElementById("form-info-panel-msg");
+        var formData = {
+            username: username,
+            password: password,
+            persist: persist
+        };
 
-    fetch(website + "/endpoints/login.php", {
-        method: "POST",
-        body: formData,
-        headers: {
-            "Authorization": "Bearer " + api_key
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        info.textContent = "ⓘ " + data.message;
-        if(data.status == 200){
-            if(data.data.redirect == "root"){
-                panel.style.backgroundColor = '#58EB81';
-                setTimeout(function(){
-                    window.location.href = website;
-                }, 3000);
-            }
-        }
-        else{
-            panel.style.backgroundColor = "#EB6C50"
-        }
+        var jsonData = JSON.stringify(formData);
+
+        fetch(website + '/endpoints/login.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getCookie('pak') 
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
     });
-}
+});

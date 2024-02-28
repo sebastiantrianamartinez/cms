@@ -1,7 +1,17 @@
 {
     "require": {
-        "firebase/php-jwt": "^6.8",
-        "phpmailer/phpmailer": "^6.8",
-        "cboden/ratchet": "^0.4.4"
+        "doctrine/orm": "^2.17",
+        "phpmailer/phpmailer": "^6.9",
+        "ezyang/htmlpurifier": "^4.17",
+        "symfony/security-bundle": "^5.4",
+        "php-ai/php-ml": "^0.9.0",
+        "doctrine/cache": "1.13.0",
+        "doctrine/annotations": "^2.0",
+        "firebase/php-jwt": "^6.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\Database\\Entities\\": "core/database/entities/"
+        }
     }
 }

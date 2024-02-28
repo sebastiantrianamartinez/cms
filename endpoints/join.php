@@ -1,88 +1,106 @@
 <?php
     (!defined('ROOT')) ? define('ROOT', dirname(__FILE__, 2)) : "";
     require_once ROOT .'/core/routing/routing.php';
+    require_once ROOT .'/endpoints/services/activation-mail.php';
 
-    $service = [
-        "id" => 3
+    $models = [
+        "lib" => ["responser", "exception"]
     ];
     
-    require_once ROOT .'/auth/headers/api_header.php';
+    Routing::model(null, $models);
+    Routing::waf('auth/server');
+    Routing::vendor();
 
-    $modules = [
-        "firewall" => "secureLogin",
-        "database" => [
-            "queryBuilder",
-            "database"
-        ],
-        "lib" => "stringUtility"
-    ];
+    $config = Routing::config("auth");
+   
 
-    routing::bigRouting($modules);
+    $responser = new Responser();
+    $authServer = new AuthServer($entityManager);
+    use Core\Database\Entities\Users;
+    use Core\Database\Entities\Activation;
 
-    if(is_int($user["id"]) && $user["id"] > 0){
-        responser::httpResponse(400, "A session already exists", NULL);
-        die();
-    }
-    if($_SERVER["REQUEST_METHOD"] == 'PUT'){
-        if(!is_string($requestData["user_name"])){
-            responser::httpResponse(400, "Inoming data error", NULL);
+    $sid = 2;
+    $entityManager = Routing::entityManager();
+   
+    try{
+        if(is_bool($entityManager)){
+            $responser->toHttpRequest(500, "Invalid entity manager", null);
             die();
         }
-        $qb = new queryBuilder();
-        $database = new database(true, NULL);
-        $queryRequest = $qb->select('*')
-            ->from('users')
-            ->where('user_name', '=' , $requestData["user_name"])
-            ->build();
-        $selectRequest = $database->executeQuery($queryRequest["query"], $queryRequest["params"]);
-        if($selectRequest["status"] != 200){
-            responser::httpResponse(400, "Server error", NULL);
-            die();
-        }
-        $matches = $selectRequest["data"]->fetchAll(PDO::FETCH_ASSOC);
-        if(empty($matches)){
-            responser::httpResponse(200, "User is available", NULL);
-            die();
-        }
-        else{
-            responser::httpResponse(400, "User is not available", NULL);
-            die();
-        }
-    }
-    if($_SERVER["REQUEST_METHOD"] == 'POST'){
-        $qb = new queryBuilder();
-        $database = new database(true, NULL);
+    
+        require_once ROOT .'/endpoints/core.php'; // <-- @sid @entityManager <--
 
-        if($requestData["user_password"] !== $requestData["user_password_confirm"]){
-            return responser::httpResponse(400, "Passwords don't match", NULL);
-            die();
-        }
-        $dataValidity = intval(stringUtility::isStringValid($requestData["user_name"], stringUtility::LETTERS_AND_NUMBERS, ['-', '.'], 4));
-        $dataValidity *= intval(stringUtility::isStringValid($requestData["user_alias"], stringUtility::LETTERS_AND_NUMBERS, [' ']), 1);
-        $dataValidity *= intval(stringUtility::isStringValid($requestData["user_mail"], stringUtility::EMAIL_ADDRESS, NULL), 4);
-        $dataValidity *= intval(stringUtility::isStringLengthValid($requestData["user_password"], 8, 100));
+    
+        if($_SERVER["REQUEST_METHOD"] == 'POST'){
 
-        if($dataValidity === 0){
-            return responser::httpResponse(400, "Data is incorrect", NULL);
-            die();
-        }
-        $insertData = [
-            "user_name" => $requestData["user_name"],
-            "user_mail" => $requestData["user_mail"],
-            "user_password" => password_hash($requestData["user_password"], PASSWORD_BCRYPT),
-            "user_alias" => $requestData["user_alias"],
-        ];
-        $queryRequest = $qb->insert('users', $insertData)
-            ->build();
-        $insertRequest = $database->executeQuery($queryRequest["query"], $queryRequest["params"]);
-        if($insertRequest["status"] != 200){
-            if(strpos($insertRequest["data"], "user_mail")){
-                return responser::httpResponse(200, "Invalid mail " , NULL);
+            $username = $data['username'] ?? '';
+            $email = $data['email'] ?? '';
+            $password = $data['password'] ?? '';
+            $alias = $data['alias'] ?? '';
+            
+            if(isset($data['master_key']) && password_verify($data['master_key'], Routing::key('master'))){
+                //¡ 00083E00DD3268955A53279C10F7F17A
+                $group = (isset($data['group'])) ? $data['group'] : $config['def_group'];
             }
-            if(strpos($insertRequest["data"], "user_name")){
-                return responser::httpResponse(200, "Invalid username " , NULL);
+            else{
+                $group = $config['def_group'];
             }
-            return responser::httpResponse(200, "Database  fatal error ".$insertRequest["data"], NULL);
+
+            // Validar que los datos necesarios están presentes
+            if (empty($username) || empty($email) || empty($password) || empty($group)) {
+                $responser->toHttpRequest(400, "Faltan datos requeridos", null);
+                exit;
+            }
+        
+            // Crear una nueva instancia de la entidad Users
+            $newUser = new Users();
+        
+            $status = ($config["verification"]) ? $config["status"]["inactive"] : $config["status"]["active"];
+
+            // Establecer los valores del nuevo usuario
+            $newUser->setName($username);
+            $newUser->setMail($email);
+            $newUser->setPassword($password); // La contraseña se encriptará automáticamente en el método setPassword
+            $newUser->setGroup($group);
+            $newUser->setAlias($alias);
+            $newUser->setStatus($status);
+        
+            // Guardar el nuevo usuario en la base de datos
+            $entityManager->persist($newUser);
+            $entityManager->flush();
+
+            if(!$config["verification"]){
+                $responser->toHttpRequest(200, "Usuario creado exitosamente ", null);
+                die();
+            }
+
+            $activation = new Activation();
+
+            $token = uniqid(rand(), true);
+            $code = '';
+            for ($i = 0; $i < 6; $i++) {
+                if($i == 0){
+                    $code .= rand(1, 9);
+                }
+                else{
+                    $code .= rand(0, 9);
+                }
+            }
+            
+            sendActivationMail($email, $alias, $token, $code);
+
+            $activation->setUserId($newUser->getId()); 
+            $activation->setToken($token);
+            $activation->setCode($code);
+            $entityManager->persist($activation);
+            $entityManager->flush();
+            $responser->toHttpRequest(200, "Usuario creado exitosamente", $token);
+        } 
+    }
+    catch(Exception $e){
+        $responser->toHttpRequest($e->getCode(), $e->getMessage(), null);
+        if($e->getCode === 401){
+            header('location: ' .Routing::config('project')['website'] .'/views/error/unauthorized.php');
         }
-        return responser::httpResponse(200, "Success user registration", NULL);
+        $responser->toHttpRequest(401, $e->getMessage, null);
     }

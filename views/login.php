@@ -1,75 +1,37 @@
 <?php
+    $sid = 1;
+
     (!defined('ROOT')) ? define('ROOT', dirname(__FILE__, 2)) : "";
-    require_once ROOT .'/core/routing/routing.php';
+    require_once ROOT .'/views/core.php';
 
-    $service = [
-        "id" => 1
-    ];
-    require_once ROOT .'/auth/headers/interface_header.php';
-    
-    if(is_int($user["id"]) && $user["id"] > 0){
-        $website = routing::config('project', 'dns')["data"]["website"];
-        header('location: ' .$website);
-        die();
-    }
-
-    $modules = [
-        "lib" => "htmlFormatter",
-    ];
-    routing::bigRouting($modules);
-    session_start();
+    $models = ["lib" => "webBuilder"];
+    Routing::model(null, $models);
 ?>
+
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login</title>
         <?php
-            htmlFormatter::printFaviconLink('favicon.ico', true);
+            $wb = new WebBuilder();
 
-            htmlFormatter::printStylesheetLink('normalize.css', true);
-            htmlFormatter::printStylesheetLink('login.css', true);
-
-            htmlFormatter::printScriptLink('config.js', true, true);
-            htmlFormatter::printScriptLink('app/forms.js', true, true);
+            echo $wb->getScript('config.js');
+            echo $wb->getScript('login.js');
         ?>
     </head>
     <body>
         <main>
-            <div class="login-container">
-                <div class="login-info" id="form-info-panel">
-                    <p id="form-info-panel-msg">ⓘ We protect your data</p>
-                </div>
-                <form action="" method="post" class="login-form" id="login-form" onsubmit="handleFormSubmit(event, 1);">
-                    <div class="login-form-brand">
-                        <h1 class="login-form-title">Login</h1>
-                        <?php
-                            htmlFormatter::printImage('login.gif', true, [
-                                "class" => "login-form-logo"
-                            ]);
-                        ?>
-                    </div>
-                    <input type="text" placeholder="Username or mail" class="app-input login-input" name="user_name">
-                    <div class="app-password-box">
-                            <input type="password" placeholder="Password" class="app-input login-input" name="user_password" id="user_password">
-                            <?php
-                                htmlFormatter::printImage('eye.png', true, ["onclick" => "showPassword(this, 'user_password');", "id" => "show-password-image"]);
-                            ?>
-                    </div>
-                    <div>
-                        <div class="app-check-combo login-check-combo">
-                            <input type="checkbox" name="extended">
-                            <p>Keep logged</p>
-                        </div>
-                    </div>
-                    <a href="" class="app-link">Forgot password?</a>
-                    <input type="submit" value="Login" class="app-input login-input login-submit">
+            <div>
+                <form id="app-login-form">
+                    <input type="text" name="username" id="login-username" placeholder="Username">
+                    <input type="password" name="password" id="login-password" placeholder="Password">
+                    <input type="checkbox" name="persist" id="login-persist">
+                    <label for="login-persist">Keep connected</label>
+                    <input type="submit" value="Login">
                 </form>
             </div>
         </main>
     </body>
-    <?php
-        htmlFormatter::printScriptLink('login.js', true, true);
-    ?>
     </html>

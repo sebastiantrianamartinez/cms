@@ -1,57 +1,67 @@
 <?php
     (!defined('ROOT')) ? define('ROOT', dirname(__FILE__, 2)) : "";
     require_once ROOT .'/core/routing/routing.php';
-
-    $service = [
-        "id" => 1
+    
+    $models = [
+        "lib" => ["responser", "exception"]
     ];
-    require_once ROOT .'/auth/headers/api_header.php';
+        
+    Routing::model(null, $models);
+    Routing::waf('auth/server');
+    Routing::waf('waf');
 
-    $modules = [
-        "firewall" => "secureLogin"
-    ];
+    $config = Routing::config('auth');
+    $responser = new Responser();
+    $authServer = new AuthServer($entityManager);
+    
+    $entityManager = Routing::entityManager();
 
-    routing::bigRouting($modules);
-
-    if(is_int($user["id"]) && $user["id"] > 0){
-        responser::httpResponse(400, "A session already exists", NULL);
+    $sid = 1;
+    
+    if(is_bool($entityManager)){
+        $responser->toHttpRequest(500, "Invalid entity manager", null);
         die();
     }
-    
-    if($_SERVER["REQUEST_METHOD"] == 'POST'){
-        $qb = new queryBuilder();
-        $database = new database(true, NULL);
-        $secureLogin = new secureLogin();
 
-        $queryRequest = $qb->select("*")
-            ->from('users')
-            ->where('user_name', '=', $requestData["user_name"])
-            ->orWhere('user_mail', '=', $requestData["user_name"])
-            ->build();
-        $selectQuery = $queryRequest["query"];
-        $params = $queryRequest["params"];
-        $userRequest = $database->executeQuery($selectQuery, $params)["data"];
-        $userRequest = $userRequest->fetch();
-        if(is_int($userRequest["user_id"])){
-            if(password_verify($requestData["user_password"], $userRequest["user_password"])){
-                $authentication->newSession($userRequest["user_id"], boolval($requestData["extended"]));
-                session_start();
-                if(isset($_SESSION["referal"])){
-                    $redirect = $_SESSION["referal"];
-                }
-                else{
-                    $redirect = "root";
-                }
-                unset($_SESSION['referal']);
-                responser::httpResponse(200, "Sucess login, redirecting...", ["redirect" => $redirect]);
+    require_once ROOT .'/endpoints/core.php'; // <-- @sid @entityManager <--
+    
+    try{
+        if($_SERVER["REQUEST_METHOD"] == 'POST'){
+            if(!$guest){
+                $responser->toHttpRequest(400, "Session already exists", null);
+                die();
             }
-            else{
-                $secureRequest = $secureLogin->failedAttempt();
-                responser::preformedHttpResponse($secureRequest);
+        
+            $user = $authServer->authenticate($data["username"], $data["password"]);
+            if($user->getId() > 0){
+                $authServer->sessionize($user, $data["persist"]);
+                $responser->toHttpRequest(200, "Session established", null);
             }
         }
-        else{
-            $secureRequest = $secureLogin->failedAttempt();
-            responser::preformedHttpResponse($secureRequest);
+        if($_SERVER["REQUEST_METHOD"] == 'DELETE'){
+            if($guest){
+                $responser->toHttpRequest(404, "No sessions for delete", null);
+                die();
+            }
+            if($authServer->unlink($sessionToken)){
+                $responser->toHttpRequest(200, "Success logout", null);
+                die();
+            }
+            $responser->toHttpRequest(400, "Logout error", null);
+            die();
         }
     }
+    catch(Exception $e){
+        //$responser->toHttpRequest($e->getCode(), $e->getMessage(), null);
+        if($e->getMessage() == "Password incorrect" || $e->getMessage() == "User not found"){
+            $waf = new Waf($entityManager);
+            $message = $waf->authFail($service);  
+            $responser->toHttpRequest(401, $message, null);
+        }
+        if($e->getCode() >= 401 && $e->getCode() <= 403){
+            //$responser->toHttpRequest(401, $e->getMessage, null);
+            Routing::view(null, 'error/unauthorized.php?reason= '.$e->getCode(), true);
+        }
+    }
+?>
+   

@@ -1,72 +1,142 @@
 <?php
     (!defined('ROOT')) ? define('ROOT', dirname(__FILE__, 3)) : "";
-    require_once ROOT .'/core/excp/throwing.php';
+    
+    
+    interface routingInterface {
+        public static function model(string $model = null, array $models = null, string $method = 'r_o');
+        public static function config(string $config = null, string $subconfig = null);
+        public static function view($middlewareHandler, string $view = null, bool $redirect = false);
+    }
 
-    class routing {
-        public static function library(string $module, $submodule){
-            $excents = routing::config('routing', NULL)["data"]["excents"];
-            $file = ROOT .'/core/' .$module .'/';
-            if(array_key_exists($module, $excents)){
-                $file = ROOT .'/' .$module .'/';
-            }
-            $file .= ($submodule === NULL) ? $module .'.php' : $submodule .'.php';
-            if(!file_exists($file)){
-                return ["status" => 404, "message"=> "Module does not exists ", "data"=>NULL];
-            }
-            require_once $file;
-            return ["status" => 200, "message"=> "Module online", "data"=>NULL];
-        }
+    class Routing implements routingInterface {
 
-        public static function config(string $module, $submodule) {
-            $file = ROOT .'/config/' .$module .'/';
-            $file .= ($submodule === NULL) ? 'config.json' : $submodule .'.json';
+        private static function takein($file, $method){
             if(!file_exists($file)){
-                return ["status" => 404, "message"=> "Config file does not exists ", "data"=>NULL];
+                return false;
             }
-            $config = json_decode(file_get_contents($file), true);
-            return ["status" => 200, "message"=> "Config online", "data"=>$config];
+            switch($method){
+                case 'r_o':
+                    require_once $file;
+                    break;
+                case 'r':
+                    require $file;
+                    break;
+                case 'i_o':
+                    include_once $file;
+                    break;
+                case 'i':
+                    include $file;
+                    break;
+            }
+            return true;
         }
         
-        public static function key(string $keyName) {
-            $file = ROOT .'/config/keys/' .$keyName .'.key';
-            if(!file_exists($file)){
-                return ["status" => 404, "message"=> "Key file does not exists ", "data"=>NULL];
-            }
-            $key = file_get_contents($file);
-            return ["status" => 200, "message"=> "Key online", "data"=>$key];
-        }
-
-        public static function bigRouting(array $modules){
-            $failure = false;
-            $exceptions = array();
-            foreach($modules as $key => $value) {
-                if (is_array($value)) {
-                    foreach ($value as $val) {
-                        if (!is_string($val)) {
-                            $exceptions[$key] = $val;
-                            $failure = true;
-                        } else {
-                            $process = routing::library($key, $val);
-                            if($process["status"] != 200){
-                                $exceptions[$key] = $val;
-                                $failure = true;
+        private static function match(string $module = null, array $modules = null, string $method, string $resource){
+            $error = array();
+            if(is_array($modules)){
+                foreach($modules as $module => $submodules){
+                    if(is_array($submodules)){
+                        foreach($submodules as $submodule){
+                            $file = ROOT .'/' .$resource .'/' .$module .'/' .$submodule .'.php';
+                            if(!self::takein($file, $method)){
+                                $error[$file] = 'failed';
                             }
                         }
                     }
-                } 
-                else {
-                    $process = routing::library($key, $value);
-                    if($process["status"] != 200){
-                        $exceptions[$key] = $value;
-                        $failure = true;
+                    else{
+                        $file = ROOT .'/' .$resource .'/' .$module .'/' .$submodules .'.php';
+                        if(!self::takein($file, $method)){
+                            $error[$file] = 'failed';
+                        }
                     }
                 }
             }
-            if($failure == false){
-                return ["status" => 200, "message"=> "All modules online", "data"=>NULL];
+            else{
+                $file = ROOT .'/' .$resourse .'/' .$module .'/' .$module .'.php';
+                if(!self::takein($file, $method)){
+                    $error[$file] = 'failed';
+                }
             }
-            return ["status" => 400, "message"=> "Some modules connection failed", "data"=>$exceptions];
+            
+            return (!empty($error)) ? $error : "All success";
+        }
+
+        public static function model(string $model = null, array $models = null, string $method = 'r_o'){
+            return self::match($model, $models, $method, 'core');
         }
         
+        public static function config(string $config = null, string $subconfig = null){
+            if(is_string($subconfig)){
+                $file = ROOT .'/config/' .$config .'.' .$subconfig .'.json';
+            }
+            else{
+                $file = ROOT .'/config/' .$config .'.json';
+            }
+            if(!file_exists($file)){
+                return '404';
+            }      
+            return json_decode(file_get_contents($file), true);
+        }
+
+        public static function key(string $key = null, string $subkey = null){
+            if(is_string($subkey)){
+                $file = ROOT .'/config/keys/' .$key .'.' .$subkey .'.key';
+            }
+            else{
+                $file = ROOT .'/config/keys/' .$key .'.key';
+            }
+            if(!file_exists($file)){
+                throw new Exception("key not found");
+            }      
+            return file_get_contents($file);
+        }
+
+        public static function vendor(){
+            if(!file_exists(ROOT .'/vendor/autoload.php')){
+                throw new Exception("autoload not found");
+            }
+            require_once ROOT .'/vendor/autoload.php';
+        }
+
+        public static function waf(string $module = null, string $submodule = null){
+            if(is_string($submodule)){
+                $file = ROOT .'/waf/' .$module .'/' .$submodule .'.json';
+            }
+            else{
+                $file = ROOT .'/waf/' .$module .'.php';
+            }
+            if(!file_exists($file)){
+                throw new Exception("Waf module not found");
+            }      
+            require_once $file;
+        }
+
+        public static function entityManager(){
+            return require_once ROOT .'/core/database/connection.php';
+        }
+
+        public static function view($middlewareHandler, string $view = null, bool $redirect = false){
+            $project = self::config('project');
+            $website = $project['website'];
+            if(isset($middlewareHandler)){
+                if(!$middlewareHandler()){
+                    $location = $website .'/views/error/unauthorized.php';
+                    header('location: ' .$location);
+                    die();
+                }
+            }
+            $project = self::config('project', null);
+            $website = $project['website'];
+            if($redirect){
+                $location = $website .'/views/' .$view;
+                header('location: ' .$location);
+                die();
+            }
+            $location = ROOT .'/views/' .$view;
+            include $location;
+            die();
+        }  
     }
+
+    date_default_timezone_set(Routing::config('project')["timezone"]); 
 ?>

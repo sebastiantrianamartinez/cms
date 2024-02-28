@@ -1,0 +1,5 @@
+{
+    "images": "/assets/media/images",
+    "scripts": "/frontend/scripts",
+    "styles": "/frontend/styles"
+}

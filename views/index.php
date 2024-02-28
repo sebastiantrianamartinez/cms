@@ -1,14 +1,12 @@
 <?php
     (!defined('ROOT')) ? define('ROOT', dirname(__FILE__, 2)) : "";
-    require_once ROOT .'/core/routing/routing.php';
+    require_once ROOT .'/waf/ipAccess.php';
 
-    $modules = [
-        "lib" => "htmlFormatter",
-    ];
-    routing::bigRouting($modules);
+    $IpAccess = new IpAccess();
 
-    echo 'INDEX'
-
-?>
-
-<a href="endpoints/logout.php">Cerrar sesion</a>
+    if($IpAccess->isIpBlocked($_SERVER["REMOTE_ADDR"])){
+        echo '403 usted ha sido bloqueado';
+    }
+    else{
+        echo '200 bienvenido al sistema';
+    }

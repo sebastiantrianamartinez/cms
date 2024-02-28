@@ -1,0 +1,45 @@
+{
+    "sanctions": {
+        "1": {
+            "3": 3600,
+            "5": 43200,
+            "6": 432000,
+            "7": 1296000,
+            "8": 5184000,
+            "9": -1
+        },
+        "2": {
+            "2": 43200,
+            "3": 1296000,
+            "4": -1
+        },
+        "3": {
+            "1": 1296000,
+            "2": -1
+        }
+        
+    },
+
+    "violations": {
+        "default": { "message": "Unknown waf violation", "sanction": 1, "effect": 43200},
+        "CWE-352": { "message": "Too many failed attempts", "sanction": 1, "effect": 43200 },
+        "CWE-285": { "message": "Exceeded failed attempts", "sanction": -1, "effect": 43200 },
+        "CWE-770": { "message": "Too many requests", "sanction": 1, "effect": 43200 },
+        "CWE-79": { "message": "XSS-Patterns detected in request", "sanction": 2, "effect": 2592000 },
+        "CWE-89": { "message": "SQL-Patterns detected in request", "sanction": 2, "effect": 2592000 },
+        "CWE-916": { "message": "MACHINE-Patterns detected in request", "sanction": 2, "effect": 2592000 },
+        "CWE-829": { "message": "Forbidden resources requests", "sanction": 2, "effect": 1296000 },
+        "CWE-824": { "message": "Ultra-forbidden resources requests", "sanction": 2, "effect": 2592000 },
+        "SWE-10": { "message": "Re-attempting after blocked", "sanction": 1, "effect": 3600 }
+    },
+    "occurrences": {
+        "SOR-1": "User consumed a service successfully"
+    },
+    
+    "policy": {
+        "level_rpm": [2000, 6, 100, 10, 1],
+        "attempting_effect": 3600,
+        "tracking_effect": 3600,
+        "tracking_interval": 60
+    }
+}   

@@ -1,0 +1,11 @@
+{
+    "connection": {
+        "driver": "pdo_mysql",
+        "host": "localhost",
+        "dbname": "engine",
+        "user": "root",
+        "password": ""
+    },
+    "entities_path": ["core/database/entities"],
+    "is_dev_mode": true
+}

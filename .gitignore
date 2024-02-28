@@ -1,21 +1,2 @@
-# Ignore image files 
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.bmp
-*.tiff
-*.ico
-
-# Ignore video files
-*.mp4
-*.avi
-*.mkv
-*.mov
-*.wmv
-*.flv
-*.webm
-
-#ignore special files
-* .key
-/vendor
+storage/cache/
+vendor/
