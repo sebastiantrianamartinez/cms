@@ -1,2 +1,4 @@
 storage/cache/
 vendor/
+config/project.json
+frontend/scripts/config.js

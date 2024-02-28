@@ -6,6 +6,10 @@
 
     $models = ["lib" => "webBuilder"];
     Routing::model(null, $models);
+
+    if(!$guest){
+        Routing::view(null, 'index.php', true);
+    }
 ?>
 
     <!DOCTYPE html>
