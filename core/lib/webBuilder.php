@@ -17,7 +17,7 @@
 
         public function getImage($imageName, $attributes = []) {
             $imageSrc = $this->combinePaths($this->website, $this->imagesPath, $imageName);
-            return $this->createElement('img', array_merge(['src' => $imageSrc], $attributes));
+            return $this->createElement('img', array_merge(['src' => $imageSrc, 'loading' => 'lazy'], $attributes));
         }
 
         public function getScript($scriptName, $attributes = []) {
